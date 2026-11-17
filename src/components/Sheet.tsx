@@ -3,7 +3,7 @@ import type { Paper } from '../lib/paper'
 import { contentHeight, HEADER_H } from '../lib/paper'
 
 /** One physical sheet of paper. Fixed pixel size (96 dpi) so preview, print and PDF all match. */
-export function Sheet({ paper, children }: { paper: Paper; children: ReactNode }) {
+export function Sheet({ paper, children, credit }: { paper: Paper; children: ReactNode; credit?: string }) {
   return (
     <div
       className="sheet"
@@ -16,6 +16,10 @@ export function Sheet({ paper, children }: { paper: Paper; children: ReactNode }
       <div className="sheet-content" style={{ height: contentHeight(paper) }}>
         {children}
       </div>
+      {credit ? (
+        // sits in the bottom space every sheet reserves for a footer; explicit color so the PDF export keeps it
+        <div style={{ position: 'absolute', left: 0, right: 0, bottom: 14, textAlign: 'center', fontSize: 11, fontWeight: 600, color: '#a8a29e' }}>{credit}</div>
+      ) : null}
     </div>
   )
 }

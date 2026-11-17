@@ -88,9 +88,19 @@ if some input produces no page without a specific `error` message, the test fail
 (`not_found_handling: single-page-application`). Do **not** add a `public/_redirects` file with `/* /index.html 200`: Cloudflare rejects it
 as an infinite redirect loop. Build command: `npm run build`. Deploy command: `npx wrangler deploy`.
 
+## SEO and sharing
+
+- **Copy for search engines** lives in `src/seo/data.ts`: a title, description, intro and three tips for every tool. A test fails if a tool is added without it, or if a title or description is too long.
+- **Static pages:** `scripts/seoPlugin.ts` runs at the end of `npm run build` and writes `dist/<slug>/index.html` for every tool and page (title, description, canonical link, Open Graph and Twitter tags, JSON-LD, and a plain-HTML copy of the text), plus `sitemap.xml` and `robots.txt`.
+  The builder is `src/seo/pages.ts` (tested in `src/seo/seo.test.ts`). Set `VITE_SITE_URL` to the real address before deploying.
+- **Share picture:** `public/og.png` (1200×630) is made from `scripts/og.html`; the command to regenerate it is in that file.
+- **Copy link:** the toolbar button puts the worksheet (words, settings, seed) after `#share=` in the address. That part of an address is never sent to a server.
+  Everything read back is checked against the tool's defaults (`src/lib/share.ts`). Tools that hold private data set `noShare: true` (the student picker).
+- **Credit line:** every sheet prints "Made with … free at <address>" in the footer space. Teachers can switch it off under Page settings (saved in their browser).
+- **After deploying:** add the site to Google Search Console and Bing Webmaster Tools and submit `/sitemap.xml`.
+
 ## Known limitations
 
-- A plain React single-page app is weak for SEO: the landing page and tool content only exist after JavaScript runs. Every page already has its own address,
-  title and description, so it can be pre-rendered later (vite-ssg or Astro) without changing the structure.
-- There is no sitemap, social sharing image (og:image) or analytics yet.
+- The app is still a client-side single-page app, but `npm run build` also writes static HTML for every address (see "SEO and sharing"). Only the page title, description, main text and links are static; the tool itself needs JavaScript.
+- There is no analytics yet (use Google Search Console for search data, it needs no code).
 - Not yet verified: native printing on A4, and Safari and Firefox.

@@ -2,10 +2,11 @@ import { Heart, ExternalLink, Share2, Coffee } from 'lucide-react'
 import { APP_NAME, DONATE_PROVIDER, DONATE_URL, OPERATOR_BIO, OPERATOR_COUNTRY, OPERATOR_NAME } from '../config'
 import { Link, usePageMeta } from '../lib/router'
 import { PageShell } from '../components/SiteChrome'
+import { DONATE_SEO } from '../seo/data'
 import { READY_TOOLS } from '../tools/registry'
 
 export default function Donate() {
-  usePageMeta(`Support ${APP_NAME}`, `${APP_NAME} is free for everyone. If it saves you time, you can help keep it running with a donation.`)
+  usePageMeta(DONATE_SEO.title.replace('{APP}', APP_NAME), DONATE_SEO.description.replace('{APP}', APP_NAME))
   return (
     <PageShell>
       <section className="mx-auto max-w-3xl px-4 py-14 text-center sm:px-6">
@@ -14,7 +15,7 @@ export default function Donate() {
         </span>
         <h1 className="mt-5 text-4xl font-black tracking-tight text-stone-900 sm:text-5xl">Keep {APP_NAME} free</h1>
         <p className="mx-auto mt-4 max-w-xl text-lg leading-relaxed text-stone-600">
-          All {READY_TOOLS.length} tools are free for everyone: no account, no ads, no limits. If {APP_NAME} saves you time, a small donation helps cover the costs of keeping it online and lets us build more tools.
+          All {READY_TOOLS.length} tools are free for everyone: no account, no ads, no limits. If {APP_NAME} saves you time, a small donation is a thank-you that gives me time to build more tools and fix problems.
         </p>
 
         <div className="mt-8">
@@ -43,7 +44,7 @@ export default function Donate() {
         <div className="mx-auto mt-12 grid max-w-2xl gap-4 text-left sm:grid-cols-2">
           <div className="rounded-2xl bg-white p-5 ring-1 ring-black/5">
             <h2 className="flex items-center gap-2 text-lg font-extrabold text-stone-900"><Heart size={18} className="text-orange-500" /> Where it goes</h2>
-            <p className="mt-1.5 text-[15px] text-stone-600">Hosting and the domain name, and time to make new tools and fix problems.</p>
+            <p className="mt-1.5 text-[15px] text-stone-600">Time to make new tools, fix problems and keep everything free and ad-free. The site itself costs almost nothing to run.</p>
           </div>
           <div className="rounded-2xl bg-white p-5 ring-1 ring-black/5">
             <h2 className="flex items-center gap-2 text-lg font-extrabold text-stone-900"><Share2 size={18} className="text-emerald-600" /> Cannot donate?</h2>

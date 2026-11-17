@@ -1,4 +1,5 @@
 import { useEffect, useSyncExternalStore, type AnchorHTMLAttributes, type MouseEvent } from 'react'
+import { applyMeta } from '../seo/meta'
 
 /**
  * A tiny router: the site has a handful of pages and each tool has its own address,
@@ -65,15 +66,8 @@ export function Link({ to, onClick, children, ...rest }: LinkProps) {
 
 /** Sets the browser tab title and the search-engine description for a page. */
 export function usePageMeta(title: string, description?: string) {
+  const path = usePath()
   useEffect(() => {
-    document.title = title
-    if (description === undefined) return
-    let meta = document.querySelector<HTMLMetaElement>('meta[name="description"]')
-    if (!meta) {
-      meta = document.createElement('meta')
-      meta.name = 'description'
-      document.head.appendChild(meta)
-    }
-    meta.content = description
-  }, [title, description])
+    applyMeta(title, description, path)
+  }, [title, description, path])
 }

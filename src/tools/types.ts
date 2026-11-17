@@ -45,6 +45,8 @@ export interface ReadyTool<S extends object = any> extends ToolMeta {
   /** Hide the "Worksheet title" field for tools that print no title (e.g. sticker sheets) */
   hideTitle?: boolean
   defaultSettings: S
+  /** Hide "Copy link" for tools that hold private data such as student names. */
+  noShare?: boolean
   /** Show a "New puzzle" button that changes the random seed */
   usesSeed?: boolean
   seedLabel?: string

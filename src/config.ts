@@ -1,6 +1,10 @@
+import { DEFAULT_SITE_URL } from './seo/data'
+
 const env = import.meta.env
 
 export const APP_NAME: string = env.VITE_APP_NAME || 'Pencilfable'
+/** The public address of the site, without a trailing slash. Used for canonical links, the sitemap and share previews. */
+export const SITE_URL: string = (/^https?:\/\//.test(env.VITE_SITE_URL ?? '') ? String(env.VITE_SITE_URL) : DEFAULT_SITE_URL).replace(/\/+$/, '')
 /** Optional. Shown in the footer and on the legal pages when set. */
 export const SUPPORT_EMAIL: string = env.VITE_SUPPORT_EMAIL || ''
 

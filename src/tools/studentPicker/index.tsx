@@ -28,6 +28,7 @@ const studentPicker: ReadyTool<Settings> = {
   tagline: 'Spin the wheel to pick a student, or make fair groups to print.',
   status: 'ready',
   defaultTitle: 'Our Groups',
+  noShare: true, // the class list holds real names, so never put it in a link
   defaultSettings: { names: DEFAULT_NAMES, mode: 'count', amount: 4 },
   usesSeed: true,
   seedLabel: 'Shuffle groups',

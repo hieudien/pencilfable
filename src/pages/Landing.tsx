@@ -2,6 +2,7 @@ import { Check, Eye, Gamepad2, Heart, Keyboard, ListChecks, Lock, MousePointerCl
 import { APP_NAME } from '../config'
 import { Link, usePageMeta } from '../lib/router'
 import { PageShell } from '../components/SiteChrome'
+import { LANDING_SEO } from '../seo/data'
 import { SheetThumb } from '../components/SheetThumb'
 import { findToolBySlug, READY_TOOLS } from '../tools/registry'
 import { CATEGORIES, type ReadyTool } from '../tools/types'
@@ -47,10 +48,7 @@ function ToolCard({ tool }: { tool: ReadyTool }) {
 }
 
 export default function Landing() {
-  usePageMeta(
-    `${APP_NAME} – Free printable games and worksheets for teachers and homeschool`,
-    'Make word searches, mazes, math games, bingo cards and more in seconds. Print or download a clean PDF. Free for everyone, no account, nothing uploaded.',
-  )
+  usePageMeta(LANDING_SEO.title.replace('{APP}', APP_NAME), LANDING_SEO.description)
 
   return (
     <PageShell>
@@ -148,7 +146,7 @@ export default function Landing() {
           <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-100 text-orange-600"><Heart size={28} fill="currentColor" /></span>
           <h2 className="mt-4 text-3xl font-black text-stone-900">Free for everyone, powered by donations</h2>
           <p className="mx-auto mt-3 max-w-xl text-[17px] leading-relaxed text-stone-600">
-            {APP_NAME} has no ads and no paywall. If it saves you time, a small donation helps keep it online and lets us build more tools.
+            {APP_NAME} has no ads and no paywall. If it saves you time, a small donation is a thank-you that gives me time to build more tools.
           </p>
           <Link to="/donate" className="mt-6 inline-flex items-center justify-center gap-2 rounded-xl bg-orange-500 px-7 py-3.5 text-lg font-extrabold text-white shadow-md shadow-orange-900/20 hover:bg-orange-600">
             <Heart size={18} fill="currentColor" /> Support this site

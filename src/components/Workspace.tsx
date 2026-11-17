@@ -1,19 +1,27 @@
 import { Component, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
-import { AlertTriangle, Download, Loader2, Printer, Shuffle, SlidersHorizontal, Eye } from 'lucide-react'
-import { APP_NAME } from '../config'
+import { AlertTriangle, Check, Download, Link2, Loader2, Printer, Shuffle, SlidersHorizontal, Eye } from 'lucide-react'
+import { APP_NAME, SITE_URL } from '../config'
 import { downloadPdf, printNow, setPrintPaper } from '../lib/export'
 import { PAPERS, type PaperId } from '../lib/paper'
 import { randomSeed } from '../lib/rng'
+import { usePageMeta } from '../lib/router'
+import { encodeShare, MAX_SHARE_URL_LENGTH, readShareFromHash } from '../lib/share'
 import { usePersistentState } from '../lib/storage'
+import { TOOL_SEO } from '../seo/data'
 import type { Issue, PageSpec, ReadyTool, WorksheetContext } from '../tools/types'
 import { Sheet } from './Sheet'
+import { ToolAbout } from './ToolAbout'
 import { Button, Notice, Section, Segmented, TextInput, Toggle } from './ui'
 
 interface Prefs {
   teacherName: string
   paper: PaperId
+  /** Print a small "Made with …" line at the bottom of every sheet. On unless the teacher turns it off. */
+  showCredit: boolean
 }
+
+const CREDIT_TEXT = `Made with ${APP_NAME} · free at ${SITE_URL.replace(/^https?:\/\//, '')}`
 
 interface SavedTool<S> {
   settings: S
@@ -42,13 +50,21 @@ class PreviewBoundary extends Component<{ children: ReactNode; resetKey: string 
 }
 
 export function Workspace({ tool }: { tool: ReadyTool }) {
-  const [prefs, patchPrefs] = usePersistentState<Prefs>('el:prefs', { teacherName: '', paper: 'letter' })
+  const [prefs, patchPrefs] = usePersistentState<Prefs>('el:prefs', { teacherName: '', paper: 'letter', showCredit: true })
   const [saved, patchSaved] = usePersistentState<SavedTool<object>>(`el:tool:${tool.id}`, {
     settings: tool.defaultSettings,
     title: tool.defaultTitle,
     includeAnswerKey: true,
   })
-  const [seed, setSeed] = useState(randomSeed)
+  // A shared link ("…/word-search#share=…") opens with the sender's words and settings.
+  const [incoming] = useState(() => readShareFromHash(window.location.hash, tool.defaultSettings, tool.defaultTitle))
+  const [seed, setSeed] = useState(() => incoming?.seed ?? randomSeed())
+  const [shareState, setShareState] = useState<'idle' | 'copied' | 'long'>('idle')
+  useEffect(() => {
+    if (!incoming) return
+    patchSaved({ settings: incoming.settings, title: incoming.title })
+    window.history.replaceState(null, '', window.location.pathname)
+  }, [incoming, patchSaved])
   const [tab, setTab] = useState<'edit' | 'preview'>('edit')
   const [exporting, setExporting] = useState<{ done: number; total: number } | null>(null)
   const [exportError, setExportError] = useState(false)
@@ -88,9 +104,24 @@ export function Workspace({ tool }: { tool: ReadyTool }) {
   const patchSettings = (p: Partial<typeof settings>) => patchSaved({ settings: { ...settings, ...p } })
 
   useEffect(() => setPrintPaper(paper), [paper])
-  useEffect(() => {
-    document.title = `${tool.name} – ${APP_NAME}`
-  }, [tool.name])
+  const seo = TOOL_SEO[tool.slug]
+  usePageMeta(seo ? `${seo.title} | ${APP_NAME}` : `${tool.name} – ${APP_NAME}`, seo?.description ?? tool.tagline)
+
+  async function onShare() {
+    const code = encodeShare({ settings, title: saved.title, seed: tool.usesSeed ? seed : undefined })
+    const url = `${window.location.origin}/${tool.slug}#share=${code}`
+    if (url.length > MAX_SHARE_URL_LENGTH) {
+      setShareState('long')
+      return
+    }
+    try {
+      await navigator.clipboard.writeText(url)
+    } catch {
+      window.prompt('Copy this link:', url) // clipboard blocked: let the person copy it by hand
+    }
+    setShareState('copied')
+    setTimeout(() => setShareState('idle'), 2500)
+  }
 
   const [printRoot] = useState(() => {
     const d = document.createElement('div')
@@ -118,7 +149,7 @@ export function Workspace({ tool }: { tool: ReadyTool }) {
   }
 
   const sheets = pages.map((p, i) => (
-    <Sheet key={i} paper={paper}>
+    <Sheet key={i} paper={paper} credit={prefs.showCredit === false ? undefined : CREDIT_TEXT}>
       {p.node}
     </Sheet>
   ))
@@ -167,7 +198,14 @@ export function Workspace({ tool }: { tool: ReadyTool }) {
                 onChange={(v) => patchSaved({ includeAnswerKey: v })}
               />
             )}
+            <Toggle
+              label="Small credit line at the bottom"
+              description={`Prints “${CREDIT_TEXT}”. It helps other teachers find this free tool. Turn it off any time.`}
+              checked={prefs.showCredit !== false}
+              onChange={(v) => patchPrefs({ showCredit: v })}
+            />
           </Section>
+          <ToolAbout slug={tool.slug} name={tool.name} />
           <div className="h-2" />
         </div>
       </section>
@@ -181,6 +219,11 @@ export function Workspace({ tool }: { tool: ReadyTool }) {
             </Button>
           )}
           <div className="ml-auto flex flex-wrap items-center gap-2">
+            {!tool.noShare && (
+              <Button variant="secondary" icon={shareState === 'copied' ? <Check size={18} /> : <Link2 size={18} />} onClick={onShare}>
+                {shareState === 'copied' ? 'Link copied!' : 'Copy link'}
+              </Button>
+            )}
             <Button variant="accent" icon={<Printer size={18} />} onClick={printNow} disabled={pages.length === 0}>
               Print Now
             </Button>
@@ -193,6 +236,11 @@ export function Workspace({ tool }: { tool: ReadyTool }) {
               {exporting ? `Making PDF… ${exporting.done}/${exporting.total}` : 'Download PDF'}
             </Button>
           </div>
+          {shareState === 'long' && (
+            <div className="w-full">
+              <Notice>This worksheet has too much text to fit in a link. Shorten your word list a little and try again.</Notice>
+            </div>
+          )}
           {exportError && (
             <div className="w-full">
               <Notice>We couldn&apos;t make the PDF. Please try &ldquo;Print Now&rdquo; and choose &ldquo;Save as PDF&rdquo; instead.</Notice>

@@ -95,7 +95,7 @@ function Terms() {
       </Section>
 
       <Section title="Donations">
-        <p>Donations are voluntary gifts to help keep the site running. They do not buy extra features, support or special rights, because every tool is already free. Donations are not tax-deductible and are not charitable donations unless we clearly say otherwise. Payment terms and refunds are handled by the donation service you choose.</p>
+        <p>Donations are voluntary gifts to support the person who makes the tools. They do not buy extra features, support or special rights, because every tool is already free. Donations are not tax-deductible and are not charitable donations unless we clearly say otherwise. Payment terms and refunds are handled by the donation service you choose.</p>
       </Section>
 
       <Section title="Names and trademarks">
