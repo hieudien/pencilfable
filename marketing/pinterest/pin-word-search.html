@@ -1,0 +1,70 @@
+<!doctype html>
+<!-- Source of pin-word-search.png (1000x1500, the 2:3 ratio Pinterest favours). Regenerate with:
+     chrome --headless=new --hide-scrollbars --window-size=1000,1500 --screenshot=marketing/pinterest/pin-word-search.png file:///…/pin-word-search.html -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      @font-face { font-family: Nunito; font-weight: 200 1000; src: url('../../node_modules/@fontsource-variable/nunito/files/nunito-latin-wght-normal.woff2') format('woff2'); }
+      * { box-sizing: border-box; margin: 0; }
+      body { width: 1000px; height: 1500px; overflow: hidden; position: relative; font-family: Nunito, 'Segoe UI', sans-serif; background: #fbf8f3; color: #1c1917; }
+      .top { position: absolute; inset: 0 0 auto 0; height: 610px; background: #047857; color: #fff; padding: 70px 70px 0; }
+      .brand { display: flex; align-items: center; gap: 16px; font-size: 36px; font-weight: 900; }
+      .brand b { width: 56px; height: 56px; border-radius: 15px; background: #fff; color: #047857; display: flex; align-items: center; justify-content: center; font-size: 34px; }
+      h1 { margin-top: 44px; font-size: 100px; line-height: .98; font-weight: 1000; letter-spacing: -3px; }
+      h1 span { color: #fcd34d; }
+      .sub { margin-top: 26px; font-size: 38px; font-weight: 800; color: #d1fae5; }
+      .sheet { position: absolute; left: 200px; top: 500px; width: 600px; background: #fff; border-radius: 14px; box-shadow: 0 30px 80px rgba(0,0,0,.30); padding: 34px 38px; transform: rotate(-2.5deg); }
+      .st { text-align: center; font-size: 34px; font-weight: 900; }
+      .nd { display: flex; gap: 24px; margin: 14px 0 18px; font-size: 20px; font-weight: 800; }
+      .nd span { flex: 1; border-bottom: 3px solid #1c1917; height: 24px; }
+      .nd span + span { flex: .6; }
+      .grid { display: grid; grid-template-columns: repeat(10, 1fr); border: 4px solid #1c1917; }
+      .grid i { aspect-ratio: 1; border: 1px solid #d6d3d1; font-style: normal; font-weight: 900; font-size: 26px; display: flex; align-items: center; justify-content: center; }
+      .grid i.on { background: #fcd34d; }
+      .bank { margin-top: 20px; border: 3px solid #1c1917; border-radius: 16px; padding: 12px 20px; }
+      .bank h4 { text-align: center; font-size: 17px; letter-spacing: 3px; font-weight: 900; margin-bottom: 6px; }
+      .bank ul { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px 4px; font-size: 17px; font-weight: 800; white-space: nowrap; }
+      .bank li::before { content: ''; display: inline-block; width: 15px; height: 15px; border: 3px solid #44403c; border-radius: 4px; margin-right: 6px; vertical-align: -1px; }
+      .badges { position: absolute; left: 0; right: 0; top: 1368px; display: flex; justify-content: center; gap: 18px; }
+      .badges span { background: #fff; border: 3px solid #a7f3d0; color: #047857; font-size: 26px; font-weight: 900; padding: 8px 22px; border-radius: 999px; }
+      .cta { position: absolute; left: 0; right: 0; bottom: 28px; text-align: center; font-size: 32px; font-weight: 900; color: #047857; }
+      .stamp { position: absolute; right: 70px; top: 478px; transform: rotate(10deg); background: #f97316; color: #fff; font-size: 40px; font-weight: 1000; padding: 18px 30px; border-radius: 22px; box-shadow: 0 10px 30px rgba(0,0,0,.25); z-index: 3; }
+    </style>
+  </head>
+  <body>
+    <div class="top">
+      <div class="brand"><b>P</b> Pencilfable</div>
+      <h1>Free <span>word search</span> maker</h1>
+      <div class="sub">Type your words. Print in seconds.</div>
+    </div>
+    <div class="stamp">100% FREE</div>
+    <div class="sheet">
+      <div class="st">Fruit Word Search</div>
+      <div class="nd">Name <span></span> Date <span></span></div>
+      <div class="grid" id="g"></div>
+      <div class="bank">
+        <h4>WORD BANK</h4>
+        <ul><li>APPLE</li><li>ORANGE</li><li>BANANA</li><li>GRAPE</li><li>LEMON</li><li>PEAR</li><li>MANGO</li><li>PEACH</li></ul>
+      </div>
+    </div>
+    <div class="badges"><span>No sign-up</span><span>Answer key</span><span>Print or PDF</span></div>
+    <div class="cta">pencilfable.pages.dev</div>
+    <script>
+      const N = 10, g = Array.from({ length: N }, () => Array(N).fill(''));
+      const hit = new Set();
+      const put = (w, r, c, dr, dc, show) => [...w].forEach((ch, i) => { g[r + dr * i][c + dc * i] = ch; if (show) hit.add((r + dr * i) + ',' + (c + dc * i)); });
+      put('APPLE', 0, 0, 0, 1, true); put('ORANGE', 2, 3, 0, 1, true); put('BANANA', 4, 0, 0, 1, false);
+      put('GRAPE', 6, 5, 0, 1, false); put('LEMON', 0, 9, 1, 0, false); put('PEAR', 6, 0, 1, 0, false);
+      put('MANGO', 8, 2, 0, 1, true); put('PEACH', 9, 4, 0, 1, false);
+      let s = 7; const rnd = () => (s = (s * 9301 + 49297) % 233280) / 233280;
+      const el = document.getElementById('g');
+      for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) {
+        const i = document.createElement('i');
+        i.textContent = g[r][c] || 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[Math.floor(rnd() * 26)];
+        if (hit.has(r + ',' + c)) i.className = 'on';
+        el.appendChild(i);
+      }
+    </script>
+  </body>
+</html>

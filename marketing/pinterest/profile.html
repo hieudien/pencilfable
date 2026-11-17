@@ -1,0 +1,26 @@
+<!doctype html>
+<!-- Source of profile.png (800x800). Pinterest crops profile photos to a circle, so everything important stays in the middle.
+     Regenerate: chrome --headless=new --hide-scrollbars --allow-file-access-from-files --window-size=800,800 --screenshot=marketing/pinterest/profile.png file:///…/profile.html -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      @font-face { font-family: Nunito; font-weight: 200 1000; src: url('../../node_modules/@fontsource-variable/nunito/files/nunito-latin-wght-normal.woff2') format('woff2'); }
+      * { box-sizing: border-box; margin: 0; }
+      body { width: 800px; height: 800px; overflow: hidden; background: #047857; position: relative; font-family: Nunito, 'Segoe UI', sans-serif; }
+      .tile { position: absolute; left: 180px; top: 160px; width: 440px; height: 440px; border-radius: 110px; background: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 20px 50px rgba(0,0,0,.25); }
+      .tile span { font-size: 360px; font-weight: 1000; line-height: 1; color: #047857; margin-top: -16px; }
+      /* a pencil lying across the bottom-right corner of the tile */
+      .pencil { position: absolute; left: 330px; top: 600px; width: 330px; height: 56px; transform: rotate(-32deg); transform-origin: left center; display: flex; filter: drop-shadow(0 8px 14px rgba(0,0,0,.3)); }
+      .pencil .body { flex: 1; background: #fcd34d; border-radius: 6px 0 0 6px; border-top: 6px solid #f59e0b; border-bottom: 6px solid #f59e0b; }
+      .pencil .wood { width: 62px; background: #fde7c4; clip-path: polygon(0 0, 100% 50%, 0 100%); margin-left: -1px; }
+      .pencil .tip { position: absolute; right: 0; top: 0; width: 22px; height: 56px; background: #1c1917; clip-path: polygon(0 36%, 100% 50%, 0 64%); }
+      .pencil .end { position: absolute; left: 0; top: 0; width: 34px; height: 56px; background: #f97316; border-radius: 8px 0 0 8px; }
+      .name { position: absolute; left: 0; right: 0; bottom: 56px; text-align: center; color: #d1fae5; font-size: 0; }
+    </style>
+  </head>
+  <body>
+    <div class="tile"><span>P</span></div>
+    <div class="pencil"><div class="end"></div><div class="body"></div><div class="wood"></div><div class="tip"></div></div>
+  </body>
+</html>
