@@ -82,6 +82,12 @@ or the game will not work properly (yellow box). The box appears above the previ
 Every message must say *what is wrong* and *what to do about it*. `src/tools/smoke.test.ts` enforces this for every tool:
 if some input produces no page without a specific `error` message, the test fails.
 
+## Deploying to Cloudflare
+
+`wrangler.jsonc` tells Cloudflare to serve `dist/` as static assets and to answer unknown addresses (like `/word-search`) with `index.html`
+(`not_found_handling: single-page-application`). Do **not** add a `public/_redirects` file with `/* /index.html 200`: Cloudflare rejects it
+as an infinite redirect loop. Build command: `npm run build`. Deploy command: `npx wrangler deploy`.
+
 ## Known limitations
 
 - A plain React single-page app is weak for SEO: the landing page and tool content only exist after JavaScript runs. Every page already has its own address,
