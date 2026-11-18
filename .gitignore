@@ -2,3 +2,6 @@ node_modules
 dist
 .env.local
 .wrangler
+
+# marketing material (Pinterest/X pins, copy shelf) stays local
+marketing/

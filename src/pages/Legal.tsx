@@ -6,7 +6,8 @@ import { PageShell } from '../components/SiteChrome'
 /*
  * Plain-language starting points that describe how this app really works today.
  * They are NOT legal advice. Before you launch: have a lawyer in your country review them, add your name (or
- * organisation) and a contact address, and update them if you add analytics, ads, accounts or cookies.
+ * organisation) and a contact address, and update them if you add ads, accounts, cookies or analytics other than
+ * Cloudflare Web Analytics (already described under "Technical data from our hosting provider").
  */
 
 const Section = ({ title, children }: { title: string; children: ReactNode }) => (
@@ -46,7 +47,8 @@ function Privacy() {
       </Section>
 
       <Section title="Technical data from our hosting provider">
-        <p>Like any website, the company that hosts this site may process technical data, such as your IP address and the pages requested, to deliver the site, keep it secure and measure overall traffic. We do not use this to identify you. This is covered by that provider&apos;s own privacy policy.</p>
+        <p>Like any website, the company that hosts this site may process technical data, such as your IP address and the pages requested, to deliver the site and keep it secure. We do not use this to identify you. This is covered by that provider&apos;s own privacy policy.</p>
+        <p>We use Cloudflare Web Analytics to see overall traffic: how many visits the site gets, which pages are viewed, which website or app sent the visitor, the visitor&apos;s country and browser, and how fast pages load. We only see these as totals. It does not use cookies or your browser&apos;s local storage to follow you, and we do not use it to identify you or to build a profile of you. It is provided by Cloudflare under its own privacy policy.</p>
       </Section>
 
       <Section title="Donations and other sites">
@@ -58,7 +60,7 @@ function Privacy() {
       </Section>
 
       <Section title="Changes">
-        <p>If we ever change how data is handled (for example by adding analytics), we will update this page before the change takes effect.</p>
+        <p>If we ever change how data is handled (for example by adding advertising or other analytics), we will update this page before the change takes effect.</p>
       </Section>
 
       <Section title="Who we are">

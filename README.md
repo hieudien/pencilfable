@@ -36,7 +36,7 @@ Settings are read **at build time**. On a host such as Cloudflare Pages, set the
 
 **Before going public:** have a lawyer in your country review `/privacy` and `/terms` (the text lives in `src/pages/Legal.tsx`;
 it describes how the app really works, but it is not legal advice). Add your name or organisation and a contact address,
-and update the text if you ever add analytics, ads or accounts.
+and update the text if you ever add ads, accounts or analytics other than Cloudflare Web Analytics (already described there).
 
 ## The 20 tools
 
@@ -102,5 +102,5 @@ as an infinite redirect loop. Build command: `npm run build`. Deploy command: `n
 ## Known limitations
 
 - The app is still a client-side single-page app, but `npm run build` also writes static HTML for every address (see "SEO and sharing"). Only the page title, description, main text and links are static; the tool itself needs JavaScript.
-- There is no analytics yet (use Google Search Console for search data, it needs no code).
+- Traffic is measured with Cloudflare Web Analytics, which is switched on for the Pages site in the Cloudflare dashboard (Web Analytics). It needs no code in this repo and shows visits, page views, referrer, country, path and browser. It is described in `/privacy`. Whether it separates visits by `utm_` tags is not verified, so check the Referer tab for traffic from Pinterest or X. Use Google Search Console for Google search data (also no code).
 - Not yet verified: native printing on A4, and Safari and Firefox.
